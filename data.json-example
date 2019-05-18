@@ -1,4 +1,10 @@
 {
-  "username": "username",
-  "password": "pass"
+    "username": "user"
+    "password": "pass",
+    "headless": true,
+    "escola": false,
+    "curso": false,
+    "classe": false,
+    "bloco": false,
+    "materia": false
 }
