@@ -2,7 +2,7 @@
 Script para calcular as faltas contabilizadas no moodle da faculdade Infnet. <br>
 Ajudando a otimizar aquele 75% de presença :)
 
-![Test Run](https://github.com/guiquintelas/infnet-faltas/tree/master/static/print.png)
+![Test Run](https://github.com/guiquintelas/infnet-faltas/blob/master/static/print.png)
 
 **Funções da versão 1.0**:
 - guardar dados de autenticação para futuras consultas
