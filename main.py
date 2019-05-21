@@ -135,7 +135,14 @@ def get_falta(driver, wait, materia_data, template, cache):
     faltas_disponiveis = floor(pontos_disponiveis / dia_max_pontos)
     atrasos_disponiveis = floor(pontos_disponiveis / (dia_max_pontos/2))
 
-    dias_semana = "-".join(set(dias_semana))
+    # removendo duplicatas
+    dias_semana = list(set(dias_semana))
+
+    # ordenando os dias da semana
+    dias_semana.sort(key=lambda dia: dia_semana_order.index(dia))
+
+    # convertendo em str delimitador por '-'
+    dias_semana = "-".join(dias_semana)
 
     print(template.format(materia_data['nome'],
                           dias_semana,

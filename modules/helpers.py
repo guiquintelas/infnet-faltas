@@ -1,6 +1,16 @@
 from PyInquirer import prompt
 import json
 
+dia_semana_order = [
+    "seg",
+    "ter",
+    "qua",
+    "qui",
+    "sex",
+    "sab",
+    "dom",
+]
+
 
 def select(msg, navs):
     choices = []
