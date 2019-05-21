@@ -28,7 +28,7 @@ def ask_username():
     question = {
         'type': 'input',
         'name': 'username',
-        'message': 'Qual seu username moodle?',
+        'message': 'Qual seu username no moodle?',
     }
 
     return prompt(question)["username"]
@@ -49,8 +49,8 @@ def get_data():
         with open('data.json', 'r') as f:
             return json.load(f)
     except:
-        print("Não foi encontrado o arquivo data.json. Criando um padrão...")
-        print("Seu username e passwprd serão salvas no arquivo data.json.")
+        print("Seu username e senha serão salvas no arquivo data.json para "
+              "\n facilitar a autenticação na proxima execução.")
         print("Seus dados não são coletados!")
 
     data = {
@@ -68,6 +68,24 @@ def get_data():
         json.dump(data, f, indent=4)
 
     return data
+
+
+def get_cache():
+    try:
+        with open('cache.json', 'r') as f:
+            return json.load(f)
+    except:
+        pass
+
+    return {}
+
+
+def save_cache(cache):
+    try:
+        with open('cache.json', 'w') as f:
+            json.dump(cache, f, indent=4)
+    except:
+        print("Erro ao salvar cache...")
 
 
 def get_nav_text(nav):
