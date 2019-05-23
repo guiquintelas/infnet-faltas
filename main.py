@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from modules.options import *
 from modules.helpers import *
 from math import floor
+from datetime import datetime, timedelta
 
 
 def get_driver(data):
@@ -55,9 +56,9 @@ def get_faltas(driver, wait, materia_datas, cache):
                           "Freq Atual",
                           "Faltas",
                           "Atrasos",
-                          "Não Lançados",
                           "Faltas Disp",
-                          "Atrasos Disp"))
+                          "Atrasos Disp",
+                          "Não Lançados"))
     for data in materia_datas:
         get_falta(driver, wait, data, template, cache)
 
@@ -77,11 +78,12 @@ def get_falta(driver, wait, materia_data, template, cache):
 
     for idx, dia_row in enumerate(dias_web_el):
         try:
+            first_col_html = dia_row.find_element_by_css_selector(":first-child").get_attribute("innerHTML")
+
+            # pegando dia da semana
             if idx < 5:
-                # pegando dia da semana
-                first_col_html = dia_row.find_element_by_css_selector(":first-child").get_attribute("innerHTML")
-                dia_semana = first_col_html[first_col_html.find("(")+1:first_col_html.find(")")]\
-                    .replace(" ", "")\
+                dia_semana = first_col_html[first_col_html.find("(") + 1:first_col_html.find(")")] \
+                    .replace(" ", "") \
                     .lower()
                 dias_semana.append(dia_semana)
 
@@ -97,7 +99,12 @@ def get_falta(driver, wait, materia_data, template, cache):
             else:
                 # se os pontos do dias forem '?' o prof ainda nao lançou...
                 pontos = pontos_max
-                nao_lancados += 1
+
+                # checando se a data esta no passado, se tiver
+                # contabilizar nos dias nao lancados
+                dia, mes, ano = first_col_html.split("&nbsp;")[0].split("/")
+                if datetime(int('20' + ano), int(mes), int(dia)) < datetime.now():
+                    nao_lancados += 1
 
             if pontos == 0:
                 faltas += 1
@@ -149,9 +156,9 @@ def get_falta(driver, wait, materia_data, template, cache):
                           str(freq_perc) + "%",
                           faltas,
                           atrasos,
-                          nao_lancados,
                           faltas_disponiveis,
-                          atrasos_disponiveis))
+                          atrasos_disponiveis,
+                          nao_lancados))
 
 
 def run():
