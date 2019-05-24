@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from modules.options import *
 from modules.helpers import *
 from math import floor
-from datetime import datetime, timedelta
+from datetime import date
 
 
 def get_driver(data):
@@ -94,17 +94,17 @@ def get_falta(driver, wait, materia_data, template, cache):
 
             pontos_max = int(pontos_list[1])
 
-            if pontos_list[0] != '?':
-                pontos = int(pontos_list[0])
-            else:
-                # se os pontos do dias forem '?' o prof ainda nao lançou...
+            if pontos_list[0] == '?':
+                # se os pontos do dias forem '?' é calculado como presença
                 pontos = pontos_max
 
                 # checando se a data esta no passado, se tiver
                 # contabilizar nos dias nao lancados
                 dia, mes, ano = first_col_html.split("&nbsp;")[0].split("/")
-                if datetime(int('20' + ano), int(mes), int(dia)) < datetime.now():
+                if date(int('20' + ano), int(mes), int(dia)) < date.today():
                     nao_lancados += 1
+            else:
+                pontos = int(pontos_list[0])
 
             if pontos == 0:
                 faltas += 1
