@@ -4,6 +4,18 @@ Ajudando a otimizar aquele 75% de presença :)
 
 ![Test Run](https://github.com/guiquintelas/infnet-faltas/blob/master/static/print.png)
 
+**Instalação**
+ 
+```
+git clone https://github.com/guiquintelas/infnet-faltas.git
+cd infnet-faltas
+pip install beautifulsoup4
+pip install PyInquirer
+pip install requests
+python main.py
+```
+
+
 **Funções da versão 1.0**:
 - guardar dados de autenticação para futuras consultas
 - possivel selecionar dentre essas categorias:
@@ -22,12 +34,4 @@ Ajudando a otimizar aquele 75% de presença :)
   - faltas disponiveis
   - atrasos disponiveis
   
- **Utilização**
  
-```
-git clone https://github.com/guiquintelas/infnet-faltas.git
-cd infnet-faltas
-pip install selenium
-pip install PyInquirer
-python main.py
-```

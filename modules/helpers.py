@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from PyInquirer import prompt
 import json
 
@@ -98,13 +99,23 @@ def save_cache(cache):
         print("Erro ao salvar cache...")
 
 
-def get_nav_text(nav):
-    return nav.find_element_by_tag_name("a").get_attribute("innerHTML")
+def get_nav_text(nav: BeautifulSoup):
+    # return nav.find_element_by_tag_name("a").get_attribute("innerHTML")
+    return nav.select_one("a").text
 
 
 def get_nav_label_id(nav):
-    return nav.get_attribute("aria-labelledby")
+    return nav.attrs["aria-labelledby"]
 
 
-def get_nav_link(nav):
-    return nav.find_element_by_tag_name("a").get_attribute("href")
+def get_nav_link(nav: BeautifulSoup):
+    return nav.find("a").attrs["href"]
+
+
+def get_res(res):
+    return BeautifulSoup(res.text, 'html.parser')
+
+
+def parse_html(session, url):
+    res = session.get(url)
+    return BeautifulSoup(res.text, 'html.parser')
