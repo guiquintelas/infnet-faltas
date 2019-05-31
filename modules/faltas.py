@@ -5,11 +5,12 @@ import requests
 
 
 def get_faltas(session: requests.Session, materia_datas, cache):
-    template = "{:<33} {:>8} {:>12} {:>8} {:>9} {:>14} {:>14} {:>14}"
+    template = "{:<33} {:>8} {:>8} {:>12} {:>8} {:>9} {:>14} {:>14} {:>14}"
 
     print("\nPegando dados de frequência...")
     print(template.format("Materia",
                           "Dias",
+                          "Aulas",
                           "Freq Atual",
                           "Faltas",
                           "Atrasos",
@@ -26,6 +27,8 @@ def get_falta(session: requests.Session, materia_data, template, cache):
     materia_falta_page = parse_html(session, f"{pauta_url}&view=5")
 
     dias_web_el = materia_falta_page.select("table.generaltable tbody tr")
+    aulas_total = len(dias_web_el)
+    aulas_dadas = 0
     atrasos = 0
     faltas = 0
     nao_lancados = 0
@@ -49,15 +52,22 @@ def get_falta(session: requests.Session, materia_data, template, cache):
 
         pontos_max = int(pontos_list[1])
 
+        # checando se a data esta no passado
+        dia, mes, ano = first_col_html.split("\xa0")[0].split("/")
+        data_passado = datetime(int('20' + ano), int(mes), int(dia)) < datetime.now()
+
+        if data_passado:
+            aulas_dadas += 1
+
         if pontos_list[0] == '?':
             # se os pontos do dias forem '?' é calculado como presença
             pontos = pontos_max
 
             # checando se a data esta no passado, se tiver
             # contabilizar nos dias nao lancados
-            dia, mes, ano = first_col_html.split("\xa0")[0].split("/")
-            if datetime(int('20' + ano), int(mes), int(dia)) < datetime.now():
+            if data_passado:
                 nao_lancados += 1
+
         else:
             pontos = int(pontos_list[0])
 
@@ -104,6 +114,7 @@ def get_falta(session: requests.Session, materia_data, template, cache):
 
     print(template.format(materia_data['nome'],
                           dias_semana,
+                          f"{aulas_dadas}/{aulas_total}",
                           str(freq_perc) + "%",
                           faltas,
                           atrasos,

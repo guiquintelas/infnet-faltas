@@ -16,7 +16,7 @@ python main.py
 ```
 
 
-**Funções da versão 1.0**:
+**Funções da versão 1.3**:
 - guardar dados de autenticação para futuras consultas
 - possivel selecionar dentre essas categorias:
   - escola
@@ -27,6 +27,7 @@ python main.py
 - listando essas informações por materia
   - nome da materia
   - dias da semana
+  - aulas dadas / total de aulas
   - frequencia atual
   - faltas
   - atrasos
