@@ -16,8 +16,10 @@ python main.py
 ```
 
 
-**Funções da versão 1.3**:
+**Funções da versão 2.0**:
 - guardar dados de autenticação para futuras consultas
+- Sistema de templates, podendo guardar suas escolhas para futuras execuções<br>
+![Test Run](https://github.com/guiquintelas/infnet-faltas/blob/master/static/print_template.png)
 - possivel selecionar dentre essas categorias:
   - escola
   - curso
