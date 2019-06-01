@@ -7,7 +7,7 @@ import requests
 def get_faltas(session: requests.Session, materia_datas, cache):
     template = "{:<33} {:>8} {:>8} {:>12} {:>8} {:>9} {:>14} {:>14} {:>14}"
 
-    print("\nPegando dados de frequência...")
+    print("\nPegando dados de frequência...\n")
     print(template.format("Materia",
                           "Dias",
                           "Aulas",
@@ -17,8 +17,23 @@ def get_faltas(session: requests.Session, materia_datas, cache):
                           "Faltas Disp",
                           "Atrasos Disp",
                           "Não Lançados"))
+
+    erros = {}
+
     for data in materia_datas:
-        get_falta(session, data, template, cache)
+        erros_materia = get_falta(session, data, template, cache)
+
+        if len(erros_materia) > 0:
+            erros[data["nome"]] = erros_materia
+            continue
+
+    if len(erros.keys()) > 0:
+        print("\nErros de execução...")
+        for materia in erros.keys():
+            print(materia)
+
+            for erro in erros[materia]:
+                print(" - " + erro)
 
 
 def get_falta(session: requests.Session, materia_data, template, cache):
@@ -35,22 +50,14 @@ def get_falta(session: requests.Session, materia_data, template, cache):
     dia_max_pontos = 0
     dias_semana = []
 
+    erros = []
+
     for idx, dia_row in enumerate(dias_web_el):
         first_col_html = dia_row.select_one("td:nth-of-type(1)").text
 
         # pegando dia da semana
         if idx < 5:
-            dia_semana = first_col_html[first_col_html.find("(") + 1:first_col_html.find(")")] \
-                .replace(" ", "") \
-                .lower()
-            dias_semana.append(dia_semana)
-
-        # pegando os pontos max do dia
-        pontos_list = dia_row.find(attrs={"class": "pointscol"}).text \
-            .replace(" ", "") \
-            .split("/")
-
-        pontos_max = int(pontos_list[1])
+            dias_semana.append(get_dia_semana(first_col_html))
 
         # checando se a data esta no passado
         dia, mes, ano = first_col_html.split("\xa0")[0].split("/")
@@ -58,6 +65,17 @@ def get_falta(session: requests.Session, materia_data, template, cache):
 
         if data_passado:
             aulas_dadas += 1
+
+        # pegando os pontos max do dia
+        try:
+            pontos_list = dia_row.find(attrs={"class": "pointscol"}).text \
+                .replace(" ", "") \
+                .split("/")
+
+            pontos_max = int(pontos_list[1])
+        except Exception:
+            erros.append(f"O dia {dia}/{mes}/{ano} não tem a presença disponível! Pulando para o próximo!")
+            continue
 
         if pontos_list[0] == '?':
             # se os pontos do dias forem '?' é calculado como presença
@@ -121,3 +139,11 @@ def get_falta(session: requests.Session, materia_data, template, cache):
                           faltas_disponiveis,
                           atrasos_disponiveis,
                           nao_lancados))
+
+    return erros
+
+
+def get_dia_semana(first_col_html):
+    return first_col_html[first_col_html.find("(") + 1:first_col_html.find(")")] \
+        .replace(" ", "") \
+        .lower()

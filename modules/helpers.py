@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from PyInquirer import prompt
 import json
+import os
 
 dia_semana_order = [
     "seg",
@@ -20,7 +21,10 @@ def select(msg, navs):
         if isinstance(nav, dict):
             choices.append(nav)
         else:
-            choices.append({"name": get_nav_text(nav), "value": nav})
+            choices.append({
+                "name": get_nav_text(nav),
+                "value": nav
+            })
 
     while len(msg) < 21:
         msg += " "
@@ -61,24 +65,21 @@ def get_data():
             return json.load(f)
     except:
         print("Seu username e senha serão salvas no arquivo data.json para "
-              "\n facilitar a autenticação na proxima execução.")
+              "\nfacilitar a autenticação na proxima execução.")
         print("Seus dados não são coletados!")
 
     data = {
         "username": ask_username(),
         "password": ask_password(),
-        "headless": True,
-        "escola": False,
-        "curso": False,
-        "classe": False,
-        "bloco": False,
-        "materia": False,
+        "templates": []
     }
 
+    return data
+
+
+def save_data(data):
     with open('data.json', 'w') as f:
         json.dump(data, f, indent=4)
-
-    return data
 
 
 def get_cache():
@@ -100,7 +101,6 @@ def save_cache(cache):
 
 
 def get_nav_text(nav: BeautifulSoup):
-    # return nav.find_element_by_tag_name("a").get_attribute("innerHTML")
     return nav.select_one("a").text
 
 
