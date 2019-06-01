@@ -77,5 +77,5 @@ def get_materia_pauta_url(session: requests.Session, cache, materia_link):
         return cache[materia_link]
 
     materia_page = parse_html(session, materia_link)
-    cache[materia_link] = materia_page.select("li.attendance  a").get_attribute("href")
+    cache[materia_link] = materia_page.select_one("li.attendance  a").attrs["href"]
     return cache[materia_link]
