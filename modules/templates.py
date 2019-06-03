@@ -54,7 +54,7 @@ def delete_template(data):
         {
             'type': 'list',
             'name': 'select',
-            'message': "Qual template você quer usar?",
+            'message': "Qual template você quer deletar?",
             'choices': choices
         }
     ])["select"]
