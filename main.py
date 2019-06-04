@@ -20,6 +20,11 @@ def get_session_and_index(data):
 
     res = get_res(session.post("https://lms.infnet.edu.br/moodle/login/index.php", payload))
 
+    # se achar o campo de logintoken nao foi efetuado o login
+    if res.find("input", {"name": "logintoken"}) is not None:
+        print("Erro na autenticação! Por favor tente novamente.\n")
+        exit(-1)
+
     return session, res
 
 
