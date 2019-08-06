@@ -14,6 +14,31 @@ dia_semana_order = [
 ]
 
 
+def ask(ask_type, message,  choices=None, default=None):
+    opts = {
+        'type': ask_type,
+        'name': "response",
+        'message': message
+    }
+
+    if default is not None:
+        opts["default"] = default
+
+    if choices:
+        opts["choices"] = choices
+
+    response = prompt([opts], keyboard_interrupt_msg="Tchau Tchau!")
+
+    if not response:
+        exit()
+
+    return response["response"]
+
+
+def ask_list(message, choices):
+    return ask("list", message, choices)
+
+
 def select(msg, navs):
     choices = []
 
@@ -29,34 +54,15 @@ def select(msg, navs):
     while len(msg) < 21:
         msg += " "
 
-    return prompt([
-        {
-            'type': 'list',
-            'name': 'select',
-            'message': msg,
-            'choices': choices
-        }
-    ])["select"]
+    return ask_list(msg, choices)
 
 
 def ask_username():
-    question = {
-        'type': 'input',
-        'name': 'username',
-        'message': 'Qual seu username no moodle?',
-    }
-
-    return prompt(question)["username"]
+    return ask("input", 'Qual seu username no moodle?')
 
 
 def ask_password():
-    question = {
-        'type': 'password',
-        'name': 'pass',
-        'message': 'Qual sua senha no moodle?',
-    }
-
-    return prompt(question)["pass"]
+    return ask("password", 'Qual sua senha no moodle?')
 
 
 def get_data():

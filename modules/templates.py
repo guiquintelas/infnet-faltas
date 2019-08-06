@@ -24,14 +24,7 @@ def get_template(data):
         }
     ]
 
-    response = prompt([
-        {
-            'type': 'list',
-            'name': 'select',
-            'message': "Qual template você quer usar?",
-            'choices': choices
-        }
-    ])["select"]
+    response = ask_list("Qual template você quer usar?", choices)
 
     if response == "deletar":
         delete_template(data)
@@ -50,14 +43,7 @@ def delete_template(data):
         }
     ]
 
-    template = prompt([
-        {
-            'type': 'list',
-            'name': 'select',
-            'message': "Qual template você quer deletar?",
-            'choices': choices
-        }
-    ])["select"]
+    template = ask_list("Qual template você quer deletar?", choices)
 
     if template:
         data["templates"] = [t for t in data["templates"] if t['name'] != template]
@@ -69,25 +55,12 @@ def ask_save_template(escola, curso, classe, bloco, materias, data):
     classe = get_nav_text(classe)
     bloco = get_nav_text(bloco)
 
-    save_tmplate = prompt([
-        {
-            'type': 'confirm',
-            'name': "confirma",
-            'message': "Deseja salvar as escolhas para utilizar no futuro?",
-            'default': True
-        }
-    ])["confirma"]
+    save_tmplate = ask("confirm", "Deseja salvar as escolhas para utilizar no futuro?", default=True)
 
     if save_tmplate:
 
         while True:
-            template_name = prompt([
-                {
-                    'type': 'input',
-                    'name': 'nome',
-                    'message': 'De um nome para o template.',
-                }
-            ])["nome"]
+            template_name = ask("input", 'De um nome para o template.')
 
             # checando se o nome ja existe
             if len([t for t in data["templates"] if t["name"] == template_name]) <= 0:
