@@ -6,26 +6,32 @@ import requests
 def get_session_and_index(data):
     print("\nLogando no moodle...")
 
-    session = requests.Session()
+    try:
+        session = requests.Session()
 
-    # pegando logintoken
-    soup = parse_html(session, "https://lms.infnet.edu.br/moodle/login/index.php")
-    token = soup.find("input", {"name": "logintoken"}).attrs["value"]
+        # pegando logintoken
+        soup = parse_html(session, "https://lms.infnet.edu.br/moodle/login/index.php")
+        token = soup.find("input", {"name": "logintoken"}).attrs["value"]
 
-    payload = {
-        "username": data["username"],
-        "password": data["password"],
-        "logintoken": token
-    }
+        payload = {
+            "username": data["username"],
+            "password": data["password"],
+            "logintoken": token
+        }
 
-    res = get_res(session.post("https://lms.infnet.edu.br/moodle/login/index.php", payload))
+        res = get_res(session.post("https://lms.infnet.edu.br/moodle/login/index.php", payload))
 
-    # se achar o campo de logintoken nao foi efetuado o login
-    if res.find("input", {"name": "logintoken"}) is not None:
-        print("Erro na autenticação! Por favor tente novamente.\n")
+        # se achar o campo de logintoken nao foi efetuado o login
+        if res.find("input", {"name": "logintoken"}) is not None:
+            print("Erro na autenticação! Por favor tente novamente.\n")
+            exit(-1)
+
+        return session, res
+
+    except:
+        print("Parece que o moodle esta fora do ar :/")
+        print("Por favor tente novamente mais tarde")
         exit(-1)
-
-    return session, res
 
 
 def run():
