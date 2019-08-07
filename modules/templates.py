@@ -1,5 +1,6 @@
 from modules.helpers import *
 
+
 def get_template(data):
     try:
         if len(data["templates"]) <= 0:
@@ -34,6 +35,7 @@ def get_template(data):
 
 
 def delete_template(data):
+    # nome de todos os templetes mais o 'Cancelar'
     choices = [
         *[t["name"] for t in data["templates"]],
 
@@ -46,7 +48,9 @@ def delete_template(data):
     template = ask_list("Qual template você quer deletar?", choices)
 
     if template:
+        # filtra para fora o template escolhido
         data["templates"] = [t for t in data["templates"] if t['name'] != template]
+        save_data(data)
 
 
 def ask_save_template(escola, curso, classe, bloco, materias, data):
