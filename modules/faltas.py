@@ -1,6 +1,7 @@
 from math import floor
 from datetime import datetime
 from modules.options import *
+from termcolor import cprint
 import requests
 
 
@@ -132,7 +133,20 @@ def get_falta(session: requests.Session, materia_data, template, cache):
     # convertendo em str delimitador por '-'
     dias_semana = "-".join(dias_semana)
 
-    print(template.format(materia_data['nome'],
+    # definindo coloracao do print
+    if faltas_disponiveis < 0:
+        cor_linha = "magenta"
+
+    elif faltas_disponiveis == 0:
+        cor_linha = "red"
+
+    elif faltas_disponiveis == 1 or nao_lancados >= faltas_disponiveis:
+        cor_linha = "yellow"
+
+    else:
+        cor_linha = "green"
+
+    cprint(template.format(materia_data['nome'],
                           dias_semana,
                           f"{aulas_dadas}/{aulas_total}",
                           str(freq_perc) + "%",
@@ -140,7 +154,7 @@ def get_falta(session: requests.Session, materia_data, template, cache):
                           atrasos,
                           faltas_disponiveis,
                           atrasos_disponiveis,
-                          nao_lancados))
+                           nao_lancados), color=cor_linha)
 
     return erros
 

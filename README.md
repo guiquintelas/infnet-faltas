@@ -12,6 +12,7 @@ cd infnet-faltas
 pip install beautifulsoup4
 pip install PyInquirer
 pip install requests
+pip install termcolor
 python main.py
 ```
 
