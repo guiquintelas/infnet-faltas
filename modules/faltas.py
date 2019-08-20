@@ -105,8 +105,8 @@ def get_falta(session: requests.Session, materia_data, template, cache):
             return
 
     # Pontuação da frequência:	{pontos_freq} / {pontos_freq_max}
-    list_freq_pontos = materia_falta_page.select_one("table.attlist tr:nth-of-type(7) td:nth-of-type(2)")\
-        .text.replace(" ", "")\
+    list_freq_pontos = materia_falta_page.select_one("table.attlist tr:nth-of-type(7) td:nth-of-type(2)") \
+        .text.replace(" ", "") \
         .split("/")
 
     # Porcentagem de frequência:	{freq_perc}%
@@ -122,7 +122,7 @@ def get_falta(session: requests.Session, materia_data, template, cache):
     freq_disponivel = freq_perc - 75.0
     pontos_disponiveis = freq_disponivel / ponto_por_freq
     faltas_disponiveis = floor(pontos_disponiveis / dia_max_pontos)
-    atrasos_disponiveis = floor(pontos_disponiveis / (dia_max_pontos/2))
+    atrasos_disponiveis = floor(pontos_disponiveis / (dia_max_pontos / 2))
 
     # removendo duplicatas
     dias_semana = list(set(dias_semana))
@@ -147,13 +147,13 @@ def get_falta(session: requests.Session, materia_data, template, cache):
         cor_linha = "green"
 
     cprint(template.format(materia_data['nome'],
-                          dias_semana,
-                          f"{aulas_dadas}/{aulas_total}",
-                          str(freq_perc) + "%",
-                          faltas,
-                          atrasos,
-                          faltas_disponiveis,
-                          atrasos_disponiveis,
+                           dias_semana,
+                           f"{aulas_dadas}/{aulas_total}",
+                           str(freq_perc) + "%",
+                           faltas,
+                           atrasos,
+                           faltas_disponiveis,
+                           atrasos_disponiveis,
                            nao_lancados), color=cor_linha)
 
     return erros
