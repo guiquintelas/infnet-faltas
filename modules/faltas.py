@@ -60,8 +60,10 @@ def get_falta(session: requests.Session, materia_data, template, cache):
             dias_semana.append(get_dia_semana(first_col_html))
 
         # checando se a data esta no passado
+        # usando o horário final da aula
         dia, mes, ano = first_col_html.split("\xa0")[0].split("/")
-        data_passado = datetime(int('20' + ano), int(mes), int(dia)) < datetime.now()
+        hora_fim, minuto_fim = get_horario_fim(first_col_html)
+        data_passado = datetime(int('20' + ano), int(mes), int(dia), int(hora_fim), int(minuto_fim)) < datetime.now()
 
         if data_passado:
             aulas_dadas += 1
@@ -147,3 +149,16 @@ def get_dia_semana(first_col_html):
     return first_col_html[first_col_html.find("(") + 1:first_col_html.find(")")] \
         .replace(" ", "") \
         .lower()
+
+
+def get_horario_fim(first_col_html):
+    """
+    24 / 07 / 19(Qua)
+    17 - 19:30
+    """
+    hora_minuto = first_col_html.split("\xa0")[1].split(" ")[-1].split(":")
+
+    if len(hora_minuto) < 2:
+        return hora_minuto[0], 0
+
+    return hora_minuto
