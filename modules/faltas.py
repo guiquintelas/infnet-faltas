@@ -146,7 +146,10 @@ def get_falta(session: requests.Session, materia_data, template, cache):
     elif faltas_disponiveis == 0:
         cor_linha = "red"
 
-    elif faltas_disponiveis == 1 or nao_lancados >= faltas_disponiveis:
+    elif nao_lancados >= faltas_disponiveis:
+        cor_linha = "blue"
+
+    elif faltas_disponiveis == 1:
         cor_linha = "yellow"
 
     else:
@@ -161,7 +164,6 @@ def get_falta(session: requests.Session, materia_data, template, cache):
                            faltas_disponiveis,
                            atrasos_disponiveis,
                            nao_lancados), color=cor_linha)
-
     return erros
 
 
