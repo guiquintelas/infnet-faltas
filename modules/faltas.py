@@ -1,7 +1,7 @@
 from math import floor
 from datetime import datetime
 from modules.options import *
-from termcolor import cprint
+from termcolor import cprint, colored
 import requests
 
 
@@ -27,6 +27,12 @@ def get_faltas(session: requests.Session, materia_datas, cache):
         if len(erros_materia) > 0:
             erros[data["nome"]] = erros_materia
             continue
+
+    print(colored("Faltas disponíveis", "green"), "|",
+          colored("Uma falta disponível", "yellow"), "|",
+          colored("Nenhuma falta dísponivel", "red"), "|",
+          colored("Faltas negativas!", "magenta"), "|",
+          colored("Não lançados >= Faltas Disponíveis!", "blue"))
 
     if len(erros.keys()) > 0:
         print("\nErros de execução...")
