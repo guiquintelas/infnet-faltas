@@ -31,8 +31,8 @@ def get_faltas(session: requests.Session, materia_datas, cache):
     print(colored("Faltas disponíveis", "green"), "|",
           colored("Uma falta disponível", "yellow"), "|",
           colored("Nenhuma falta dísponivel", "red"), "|",
-          colored("Faltas negativas!", "magenta"), "|",
-          colored("Não lançados >= Faltas Disponíveis!", "blue"))
+          colored("Não lançados >= Faltas Disponíveis!", "blue"), "|",
+          colored("FALTAS NEGATIVAS!", "magenta"))
 
     if len(erros.keys()) > 0:
         print("\nErros de execução...")
