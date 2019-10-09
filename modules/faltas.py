@@ -113,8 +113,9 @@ def get_falta(session: requests.Session, materia_data, template, cache):
         if dia_max_pontos == 0:
             dia_max_pontos = pontos_max
         elif dia_max_pontos != pontos_max:
-            print(f"A materia {materia_data['nome']} tem dias com frequencias diferentes, nõa é possivel calcular...")
-            return
+            msg = f"A materia {materia_data['nome']} tem dias com frequencias diferentes, nõa é possivel calcular..."
+            erros.append(msg)
+            return erros
 
     # Pontuação da frequência:	{pontos_freq} / {pontos_freq_max}
     list_freq_pontos = materia_falta_page.select_one("table.attlist tr:nth-of-type(7) td:nth-of-type(2)") \
