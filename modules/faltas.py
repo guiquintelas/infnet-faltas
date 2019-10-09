@@ -37,10 +37,12 @@ def get_faltas(session: requests.Session, materia_datas, cache):
     if len(erros.keys()) > 0:
         print("\nErros de execução...")
         for materia in erros.keys():
-            print(materia)
+            print(f"{materia}:")
 
             for erro in erros[materia]:
                 print(" - " + erro)
+
+            print()
 
 
 def get_falta(session: requests.Session, materia_data, template, cache):
