@@ -56,7 +56,7 @@ def get_materia_data(materias):
         # remove o código prefixo da materia [CDB1782DB] Nome materia
         nome = re.sub("([\(\[]).*?([\)\]])", "\g<1>\g<2>", nome)\
             .replace("[", "")\
-            .replace("] ", "")
+            .replace("]", "")
 
         materia_data.append({
             "nome": nome,
