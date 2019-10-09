@@ -64,6 +64,10 @@ def get_falta(session: requests.Session, materia_data, template, cache):
     for idx, dia_row in enumerate(dias_web_el):
         first_col_html = dia_row.select_one("td:nth-of-type(1)").text
 
+        if not first_col_html:
+            erros.append(f"Não existe dias cadastrados para a matéria {materia_data['nome']} no moodle :/")
+            return erros
+
         # pegando dia da semana
         if idx < 5:
             dias_semana.append(get_dia_semana(first_col_html))
