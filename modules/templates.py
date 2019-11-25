@@ -12,8 +12,11 @@ def get_template(data):
         print("O arquivo sera deletado e gerado na próxima execução.")
         exit(-1)
 
+    # inverte a ordem dos templates para o mais novo ser o primeiro
+    templates = data["templates"][::-1]
+
     choices = [
-        *data["templates"],
+        *templates,
 
         {
             "name": "Criar um novo",
