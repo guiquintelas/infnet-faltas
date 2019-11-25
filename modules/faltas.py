@@ -48,7 +48,13 @@ def get_faltas(session: requests.Session, materia_datas, cache):
 def get_falta(session: requests.Session, materia_data, template, cache):
     pauta_url = get_materia_pauta_url(session, cache, materia_data["link"])
 
-    materia_falta_page = parse_html(session, f"{pauta_url}&view=5")
+    erros = []
+
+    try:
+        materia_falta_page = parse_html(session, f"{pauta_url}&view=5")
+    except ConnectionError:
+        erros.append("Ocorreu um erro ao se comunicar com o moodle :/")
+        return erros
 
     dias_web_el = materia_falta_page.select("table.generaltable tbody tr")
     aulas_total = len(dias_web_el)
@@ -58,8 +64,6 @@ def get_falta(session: requests.Session, materia_data, template, cache):
     nao_lancados = 0
     dia_max_pontos = 0
     dias_semana = []
-
-    erros = []
 
     for idx, dia_row in enumerate(dias_web_el):
         first_col_html = dia_row.select_one("td:nth-of-type(1)").text
