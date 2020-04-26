@@ -54,6 +54,7 @@ def delete_template(data):
         # filtra para fora o template escolhido
         data["templates"] = [t for t in data["templates"] if t['name'] != template]
         save_data(data)
+        print(f"O template {template} for deletado com sucesso!")
 
 
 def ask_save_template(escola, curso, classe, bloco, materias, data):
