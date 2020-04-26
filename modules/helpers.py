@@ -3,6 +3,8 @@ from PyInquirer import prompt
 import json
 import os
 
+from prompt_toolkit.terminal.win32_output import NoConsoleScreenBufferError
+
 dia_semana_order = [
     "seg",
     "ter",
@@ -27,7 +29,11 @@ def ask(ask_type, message,  choices=None, default=None):
     if choices:
         opts["choices"] = choices
 
-    response = prompt([opts], keyboard_interrupt_msg="Tchau Tchau!")
+    try:
+        response = prompt([opts], keyboard_interrupt_msg="Tchau Tchau!")
+    except NoConsoleScreenBufferError:
+        print("Esse console não é suportado! :( \nSe estiver no windows use o cmd ou cmder")
+        exit(-1)
 
     if not response:
         exit()
