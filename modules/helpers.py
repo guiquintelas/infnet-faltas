@@ -68,19 +68,37 @@ def ask_password():
 def get_data():
     try:
         with open('data.json', 'r') as f:
-            return json.load(f)
-    except:
-        print("Seu username e senha serão salvas no arquivo data.json para "
-              "\nfacilitar a autenticação na proxima execução.")
-        print("Seus dados não são coletados!")
+            data = json.load(f)
 
-    data = {
-        "username": ask_username(),
-        "password": ask_password(),
+        # if data.json file exists and is valid
+        # but username or password are not set
+        if "username" not in data or "password" not in data:
+            return {
+                **ask_credentials(),
+                "templates": data["templates"]
+            }
+
+        # data.json exists and is valid
+        return data
+    except Exception:
+        pass
+
+    # data.json file doesn't exist or is invalid
+    return {
+        **ask_credentials(),
         "templates": []
     }
 
-    return data
+
+def ask_credentials():
+    print("Seu username e senha serão salvos no arquivo data.json para "
+          "\nfacilitar a autenticação na proxima execução.")
+    print("Seus dados não são coletados!")
+
+    return {
+        "username": ask_username(),
+        "password": ask_password()
+    }
 
 
 def save_data(data):
