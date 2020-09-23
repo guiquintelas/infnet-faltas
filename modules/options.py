@@ -50,7 +50,7 @@ def get_materia_data(materias):
 
     for materia in materias:
 
-        # limpando o nome da metria
+        # limpando o nome da materia
         nome = get_nav_text(materia).replace("...", "")
 
         # remove o código prefixo da materia [CDB1782DB] Nome materia
